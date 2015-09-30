@@ -26,7 +26,7 @@ class TwoPlayerGame
     until @player_one_lives == 0 || @player_two_lives == 0
       generate_question
       current_player_stats
-      puts "What is #{@number_1} + #{@number_2}?"
+      puts ("What is #{@number_1} + #{@number_2}?").colorize(:blue)
       answer = gets.chomp.to_i
       if answer == @correct_answer
         if @current_player == @player_one
@@ -34,19 +34,19 @@ class TwoPlayerGame
         else
           @player_two_score += 1
         end
-        puts "Great work! 1 point added!"
+        puts ("Great work! 1 point added!").colorize(:green)
       else
         if @current_player == @player_one
           @player_one_lives -= 1
         else
           @player_two_lives -= 1
         end
-        puts "Sorry, that's incorrect."
+        puts ("Sorry, that's incorrect.").colorize(:red)
       end
       player_switch
     end
-    puts "***GAME OVER***\nSorry #{@current_player}, you have no lives left."
-    puts "Good work!\n#{@player_one} you scored #{@player_one_score} points!\n#{@player_two} you scored #{@player_two_score} points."
+    puts ("***GAME OVER***\nSorry #{@current_player}, you have no lives left.").colorize(:red)
+    puts ("Good work!\n#{@player_one} you scored #{@player_one_score} points!\n#{@player_two} you scored #{@player_two_score} points.").colorize(:yellow)
   end
 
   def player_switch
