@@ -1,7 +1,11 @@
 require 'colorize'
 require_relative 'players'
+require_relative 'question_generator'
 require_relative 'one_player_game'
 require_relative 'two_player_game'
+
+include OnePlayerGame
+include TwoPlayerGame
 
 puts "Hello, would you like to play a game?\nPlease reply yes or no."
 response = gets.chomp.downcase
@@ -12,16 +16,14 @@ when 'yes'
   if number_of_players == 1
     puts "Please enter your name."
     name = gets.chomp.capitalize
-    new_game = OnePlayerGame.new(name)
-    new_game.ask_question
+    OnePlayerGame.one_player_game(name)
 
   elsif number_of_players == 2
     puts "Please enter a name for player 1."
     player_one_name = gets.chomp.capitalize
     puts "Please enter a name for player 2."
     player_two_name = gets.chomp.capitalize
-    new_game = TwoPlayerGame.new(player_one_name, player_two_name)
-    new_game.ask_question
+    TwoPlayerGame.two_player_game(player_one_name, player_two_name)
 
   elsif number_of_players > 2
     puts ("I'm sorry, this game only supports up to 2 players at this time.").colorize(:red)
