@@ -1,67 +1,52 @@
-class TwoPlayerGame
+module TwoPlayerGame
 
-  attr_reader :player_one, :player_one_lives, :player_one_score, :player_two, :player_two_lives, :player_one_score, :number_1, :number_2
+  attr_accessor :player_one, :player_one_lives, :player_one_score, :player_two, :player_two_lives, :player_one_score, :number_1, :number_2
 
-  @@player_lives = 3
-  @@player_score = 0
-  # @current_player = @player_one
 
-  def initialize(player_one, player_two)
-    @player_one = player_one
-    @player_one_lives = @@player_lives
-    @player_one_score = @@player_score
-    @player_two = player_two
-    @player_two_lives = @@player_lives
-    @player_two_score = @@player_score
-    @current_player = @player_one
-  end
-
-  def generate_question
-    @number_1 = rand(1..20)
-    @number_2 = rand(1..20)
-    @correct_answer = number_1 + number_2
-  end
-
-  def ask_question
-    until @player_one_lives == 0 || @player_two_lives == 0
-      generate_question
+  def two_player_game(player_one, player_two)
+    $first_player = Player.new(player_one)
+    $second_player = Player.new(player_two)
+    $current_player = $first_player
+    until $first_player.player_lives == 0 || $second_player.player_lives == 0
+      question = Question.new
       current_player_stats
-      puts ("What is #{@number_1} + #{@number_2}?").colorize(:blue)
+      puts ("What is #{question.number_1} + #{question.number_2}?").colorize(:blue)
       answer = gets.chomp.to_i
-      if answer == @correct_answer
-        if @current_player == @player_one
-          @player_one_score += 1
+      if answer == question.correct_answer
+        if $current_player == $first_player
+          $first_player.add_point
         else
-          @player_two_score += 1
+          $second_player.add_point
         end
         puts ("Great work! 1 point added!").colorize(:green)
       else
-        if @current_player == @player_one
-          @player_one_lives -= 1
+        if $current_player == $first_player
+          $first_player.subtract_life
         else
-          @player_two_lives -= 1
+          $second_player.subtract_life
         end
         puts ("Sorry, that's incorrect.").colorize(:red)
       end
       player_switch
     end
-    puts ("***GAME OVER***\nSorry #{@current_player}, you have no lives left.").colorize(:red)
-    puts ("Good work!\n#{@player_one} you scored #{@player_one_score} points!\n#{@player_two} you scored #{@player_two_score} points.").colorize(:yellow)
+    player_switch
+    puts ("***GAME OVER***\nSorry #{$current_player.name}, you have no lives left.").colorize(:red)
+    puts ("Good work!\n#{$first_player.name} you scored #{$first_player.player_score} points!\n#{$second_player.name} you scored #{$second_player.player_score} points.").colorize(:yellow)
   end
 
   def player_switch
-    if @current_player == @player_one
-      @current_player = @player_two
+    if $current_player == $first_player
+      $current_player = $second_player
     else
-      @current_player = @player_one
+      $current_player = $first_player
     end
   end
 
   def current_player_stats
-    if @current_player == @player_one
-      puts "Okay #{@player_one}, you currently have #{@player_one_lives} lives left and have #{@player_one_score} points."
+    if $current_player == $first_player
+      puts "Okay #{$first_player.name}, you currently have #{$first_player.player_lives} lives left and have #{$first_player.player_score} points."
     else
-      puts "Okay #{@player_two}, you currently have #{@player_two_lives} lives left and have #{@player_two_score} points."
+      puts "Okay #{$second_player.name}, you currently have #{$second_player.player_lives} lives left and have #{$second_player.player_score} points."
     end
   end
 
