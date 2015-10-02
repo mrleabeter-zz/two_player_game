@@ -18,18 +18,30 @@ when 'yes'
     begin
       puts "Please enter your name."
       name = gets.chomp.capitalize
-    raise InvalidName, "InvalidName: Name must be at least one character long." unless name.length > 0
-    rescue InvalidName => e
+    raise InvalidNameError, "Invalid Name: Name must be at least one character long." unless name.length > 0
+    rescue InvalidNameError => e
       puts e.message
       retry
     end
     OnePlayerGame.one_player_game(name)
 
   elsif number_of_players == 2
-    puts "Please enter a name for player 1."
-    player_one_name = gets.chomp.capitalize
-    puts "Please enter a name for player 2."
-    player_two_name = gets.chomp.capitalize
+    begin
+      puts "Please enter a name for player 1."
+      player_one_name = gets.chomp.capitalize
+    raise InvalidNameError, "Invalid Name: Name must be at least one character long." unless player_one_name.length > 0
+    rescue InvalidNameError => e
+      puts e.message
+      retry
+    end
+    begin
+      puts "Please enter a name for player 2."
+      player_two_name = gets.chomp.capitalize
+    raise InvalidName, "InvalidName: Name must be at least one character long." unless player_two_name.length > 0
+    rescue InvalidName => e
+      puts e.message
+      retry
+    end
     TwoPlayerGame.two_player_game(player_one_name, player_two_name)
 
   elsif number_of_players > 2
