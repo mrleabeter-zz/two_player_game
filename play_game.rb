@@ -3,6 +3,7 @@ require_relative 'players'
 require_relative 'question_generator'
 require_relative 'one_player_game'
 require_relative 'two_player_game'
+require_relative 'exceptions'
 
 include OnePlayerGame
 include TwoPlayerGame
@@ -14,8 +15,14 @@ when 'yes'
   puts "Okay great! How many players would you like to play with?\nPlease enter 1 or 2."
   number_of_players = gets.chomp.to_i
   if number_of_players == 1
-    puts "Please enter your name."
-    name = gets.chomp.capitalize
+    begin
+      puts "Please enter your name."
+      name = gets.chomp.capitalize
+    raise InvalidName, "InvalidName: Name must be at least one character long." unless name.length > 0
+    rescue InvalidName => e
+      puts e.message
+      retry
+    end
     OnePlayerGame.one_player_game(name)
 
   elsif number_of_players == 2
